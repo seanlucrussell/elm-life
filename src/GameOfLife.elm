@@ -18,4 +18,4 @@ cellsToCheck : Board -> Board
 cellsToCheck = foldl (nearby >> union) empty
 
 nextBoard : Board -> Board
-nextBoard b = filter (cellWillBeAlive b) (cellsToCheck b)
+nextBoard board = filter (cellWillBeAlive board) (cellsToCheck board)
