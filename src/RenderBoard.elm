@@ -1,14 +1,29 @@
 module RenderBoard exposing (renderBoard)
 
-import GameOfLife exposing (..)
-import Html exposing (Html, button, div)
-import Html.Attributes exposing (style)
-import List exposing (map, range)
-import Set exposing (member)
-import String exposing (fromFloat)
+import GameOfLife exposing (Board, Cell)
+import Html exposing (Html)
+import List exposing (filter, map, range)
+import Set exposing (toList)
+import String exposing (fromFloat, fromInt)
+import Svg exposing (Svg, circle, svg)
+import Svg.Attributes exposing (cx, cy, fill, fillOpacity, height, r, width)
 
 
-renderCell : Board -> Cell -> Html msg
+renderBoard : Board -> Html msg
+renderBoard board =
+    svg
+        [ width "100%"
+        , height "100%"
+        ]
+        (map (renderCell board) (filter inBounds (toList board)))
+
+
+inBounds : Cell -> Bool
+inBounds ( x, y ) =
+    0 <= x && x < 100 && 0 <= y && y < 100
+
+
+renderCell : Board -> Cell -> Svg msg
 renderCell board cell =
     let
         ( x, y ) =
@@ -17,35 +32,11 @@ renderCell board cell =
         opacity =
             1 / (1.001 ^ ((toFloat x - 49) ^ 2 + (toFloat y - 49) ^ 2))
     in
-    div
-        [ style "background-color"
-            (if member cell board then
-                "red"
-
-             else
-                "transparent"
-            )
-        , style "height" "100%"
-        , style "width" "1%"
-        , style "opacity" (fromFloat opacity)
-        , style "display" "inline-block"
+    circle
+        [ cx (fromInt x ++ ".5%")
+        , cy (fromInt y ++ ".5%")
+        , r "0.5%"
+        , fill "red"
+        , fillOpacity (fromFloat opacity)
         ]
         []
-
-
-renderRow : Board -> Int -> Html msg
-renderRow board rowNumber =
-    div
-        [ style "height" "1%"
-        , style "width" "100%"
-        ]
-        (map (\x -> renderCell board ( x, rowNumber )) (range 0 99))
-
-
-renderBoard : Board -> Html msg
-renderBoard board =
-    div
-        [ style "width" "100%"
-        , style "height" "100%"
-        ]
-        (map (renderRow board) (range 0 99))

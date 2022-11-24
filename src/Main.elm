@@ -31,7 +31,7 @@ randomBoardGenerator =
 
 sleep : Cmd Msg
 sleep =
-    Process.sleep 300 |> Task.perform (always SleepComplete)
+    Process.sleep 200 |> Task.perform (always SleepComplete)
 
 
 initialModel : ( Model, Cmd Msg )
