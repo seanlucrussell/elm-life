@@ -9,7 +9,7 @@ import Html.Events exposing (onClick)
 import Process
 import Random
 import RenderBoard exposing (..)
-import Set exposing (fromList)
+import Set exposing (fromList, map)
 import Task
 
 
@@ -31,7 +31,7 @@ randomBoardGenerator =
 
 sleep : Cmd Msg
 sleep =
-    Process.sleep 100 |> Task.perform (always SleepComplete)
+    Process.sleep 300 |> Task.perform (always SleepComplete)
 
 
 initialModel : ( Model, Cmd Msg )
@@ -73,6 +73,11 @@ selectorButton msg description =
         [ text description ]
 
 
+offset : Int -> Int -> Board -> Board
+offset n m =
+    map (\( x, y ) -> ( x + n, y + m ))
+
+
 view : Board -> Html Msg
 view b =
     div
@@ -90,10 +95,10 @@ view b =
             , style "flex-wrap" "wrap"
             ]
             [ selectorButton GenBoard "Randomize"
-            , selectorButton (LoadBoard glider) "Glider"
-            , selectorButton (LoadBoard explosion) "Explosion"
-            , selectorButton (LoadBoard methuselah) "Methuselah"
-            , selectorButton (LoadBoard gliderGun) "Glider Gun"
+            , selectorButton (LoadBoard (offset 50 50 glider)) "Glider"
+            , selectorButton (LoadBoard (offset 50 50 pulsar)) "Pulsar"
+            , selectorButton (LoadBoard (offset 50 50 methuselah)) "Methuselah"
+            , selectorButton (LoadBoard (offset 50 50 gliderGun)) "Glider Gun"
             ]
         ]
 

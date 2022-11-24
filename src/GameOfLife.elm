@@ -17,13 +17,18 @@ nearby ( x, y ) =
     map (\n -> ( x - 1 + modBy 3 n, y - 1 + n // 3 )) (fromList (range 0 8))
 
 
+neighbors : Set Cell -> Cell -> Set Cell
+neighbors board cell =
+    intersect board (diff (nearby cell) (singleton cell))
+
+
 cellWillBeAlive : Board -> Cell -> Bool
 cellWillBeAlive board cell =
     let
-        neighbors =
-            size (intersect board (diff (nearby cell) (singleton cell)))
+        numberOfNeighbors =
+            size (neighbors board cell)
     in
-    neighbors == 3 || (neighbors == 2 && member cell board)
+    numberOfNeighbors == 3 || (numberOfNeighbors == 2 && member cell board)
 
 
 cellsToCheck : Board -> Board
