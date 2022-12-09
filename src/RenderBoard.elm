@@ -1,12 +1,12 @@
 module RenderBoard exposing (renderBoard)
 
 import GameOfLife exposing (Board, Cell)
-import Html exposing (Html)
-import List exposing (filter, map, range)
+import Html.Styled exposing (Html)
+import List exposing (filter, map)
 import Set exposing (toList)
 import String exposing (fromFloat, fromInt)
-import Svg exposing (Svg, circle, svg)
-import Svg.Attributes exposing (cx, cy, fill, fillOpacity, height, r, width)
+import Svg.Styled exposing (Svg, circle, node, svg)
+import Svg.Styled.Attributes exposing (cx, cy, fill, fillOpacity, height, r, width)
 
 
 renderBoard : Board -> Html msg
@@ -15,26 +15,26 @@ renderBoard board =
         [ width "100%"
         , height "100%"
         ]
-        (map (renderCell board) (filter inBounds (toList board)))
+        (map renderCell (filter inBounds (toList board)))
 
 
 inBounds : Cell -> Bool
 inBounds ( x, y ) =
-    0 <= x && x < 100 && 0 <= y && y < 100
+    0 <= x && x < 100 && 0 <= y && y < 50
 
 
-renderCell : Board -> Cell -> Svg msg
-renderCell board cell =
+renderCell : Cell -> Svg msg
+renderCell cell =
     let
         ( x, y ) =
             cell
 
         opacity =
-            1 / (1.001 ^ ((toFloat x - 49) ^ 2 + (toFloat y - 49) ^ 2))
+            1 / (1.001 ^ ((toFloat x - 49) ^ 2 + (toFloat y - 24) ^ 2))
     in
     circle
         [ cx (fromInt x ++ ".5%")
-        , cy (fromInt y ++ ".5%")
+        , cy (fromInt (2 * y + 1) ++ "%")
         , r "0.5%"
         , fill "red"
         , fillOpacity (fromFloat opacity)

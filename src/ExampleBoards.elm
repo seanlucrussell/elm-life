@@ -48,7 +48,15 @@ gliderGun =
 
 methuselah : Board
 methuselah =
-    fromList [ ( -3, 1 ), ( -2, -1 ), ( -2, 1 ), ( 0, 0 ), ( 1, 1 ), ( 2, 1 ), ( 3, 1 ) ]
+    fromList
+        [ ( -3, 1 )
+        , ( -2, -1 )
+        , ( -2, 1 )
+        , ( 0, 0 )
+        , ( 1, 1 )
+        , ( 2, 1 )
+        , ( 3, 1 )
+        ]
 
 
 pulsar : Board
@@ -107,9 +115,21 @@ pulsar =
 
 explosion : Board
 explosion =
-    fromList [ ( -1, 0 ), ( 0, -1 ), ( 0, 0 ), ( 0, 1 ), ( 1, -1 ) ]
+    fromList
+        [ ( -1, 0 )
+        , ( 0, -1 )
+        , ( 0, 0 )
+        , ( 0, 1 )
+        , ( 1, -1 )
+        ]
 
 
 glider : Board
 glider =
-    fromList [ ( -1, 0 ), ( 0, 1 ), ( 1, -1 ), ( 1, 0 ), ( 1, 1 ) ]
+    fromList
+        [ ( -1, 0 )
+        , ( 0, 1 )
+        , ( 1, -1 )
+        , ( 1, 0 )
+        , ( 1, 1 )
+        ]

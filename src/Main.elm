@@ -1,11 +1,13 @@
 module Main exposing (..)
 
 import Browser
+import Css exposing (..)
 import ExampleBoards exposing (..)
 import GameOfLife exposing (..)
-import Html exposing (Html, button, div, text)
-import Html.Attributes exposing (style)
-import Html.Events exposing (onClick)
+import Html
+import Html.Styled exposing (Html, button, div, text, toUnstyled)
+import Html.Styled.Attributes exposing (css, style)
+import Html.Styled.Events exposing (onClick)
 import Process
 import Random
 import RenderBoard exposing (..)
@@ -26,12 +28,12 @@ type alias Model =
 
 randomBoardGenerator : Random.Generator (List Cell)
 randomBoardGenerator =
-    Random.list 500 (Random.pair (Random.int 40 60) (Random.int 40 60))
+    Random.list 500 (Random.pair (Random.int 40 60) (Random.int 10 30))
 
 
 sleep : Cmd Msg
 sleep =
-    Process.sleep 200 |> Task.perform (always SleepComplete)
+    Process.sleep 400 |> Task.perform (always SleepComplete)
 
 
 initialModel : ( Model, Cmd Msg )
@@ -59,16 +61,22 @@ selectorButton : msg -> String -> Html msg
 selectorButton msg description =
     button
         [ onClick msg
-        , style "margin" ".4em .7em"
-        , style "padding" ".4em 1em"
-        , style "font-size" "large"
-        , style "font-weight" "200"
-        , style "border-radius" "0.2em"
-        , style "border-width" "thin"
-        , style "border-style" "solid"
-        , style "border-color" "silver"
-        , style "background-color" "#ffffffbb"
-        , style "color" "#112233"
+        , css
+            [ margin2 (em 0.4) (em 0.7)
+            , padding2 (em 0.4) (em 1)
+            , fontSize large
+            , fontWeight (int 200)
+            , borderRadius (em 0.2)
+            , borderWidth (px 1)
+            , borderStyle solid
+            , borderColor (hex "C0C0C0")
+            , backgroundColor (hex "ffffffbb")
+            , color (hex "112233")
+            , hover
+                [ backgroundColor (hex "ddddddbb")
+                , borderColor (hex "a0a0a0")
+                ]
+            ]
         ]
         [ text description ]
 
@@ -81,24 +89,30 @@ offset n m =
 view : Board -> Html Msg
 view b =
     div
-        [ style "aspect-ratio" "1/1"
-        , style "width" "100%"
-        , style "position" "relative"
+        [ css
+            [ width (pct 100)
+            , position relative
+            ]
+        , style
+            "aspect-ratio"
+            "2/1"
         ]
         [ renderBoard b
         , div
-            [ style "position" "absolute"
-            , style "bottom" "0"
-            , style "width" "100%"
-            , style "display" "flex"
-            , style "justify-content" "center"
-            , style "flex-wrap" "wrap"
+            [ css
+                [ position absolute
+                , bottom (px 0)
+                , width (pct 100)
+                , displayFlex
+                , justifyContent center
+                , flexWrap wrap
+                ]
             ]
             [ selectorButton GenBoard "Randomize"
-            , selectorButton (LoadBoard (offset 50 50 glider)) "Glider"
-            , selectorButton (LoadBoard (offset 50 50 pulsar)) "Pulsar"
-            , selectorButton (LoadBoard (offset 50 50 methuselah)) "Methuselah"
-            , selectorButton (LoadBoard (offset 50 50 gliderGun)) "Glider Gun"
+            , selectorButton (LoadBoard (offset 50 20 glider)) "Glider"
+            , selectorButton (LoadBoard (offset 50 20 pulsar)) "Pulsar"
+            , selectorButton (LoadBoard (offset 50 20 methuselah)) "Methuselah"
+            , selectorButton (LoadBoard (offset 50 20 gliderGun)) "Glider Gun"
             ]
         ]
 
@@ -107,7 +121,7 @@ main : Program () Model Msg
 main =
     Browser.element
         { init = always initialModel
-        , view = view
+        , view = view >> toUnstyled
         , update = update
         , subscriptions = always Sub.none
         }
